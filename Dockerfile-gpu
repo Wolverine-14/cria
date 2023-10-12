@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as builder
+FROM nvidia/cuda:11.5.0-devel-ubuntu22.04 as builder
 # Update default packages
 RUN apt-get update
 # Get Ubuntu packages
@@ -12,7 +12,7 @@ WORKDIR /usr/src/cria
 COPY . .
 RUN cargo build --release  --features cublas
 
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
+FROM nvidia/cuda:11.5.0-runtime-ubuntu22.04
 RUN apt-get update & apt-get install -y extra-runtime-dependencies libssl & rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/src/cria/target/release/cria /usr/local/bin/cria
 CMD ["cria","-a","llama","--model","/app/model.bin"]
